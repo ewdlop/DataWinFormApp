@@ -1,4 +1,6 @@
-﻿namespace DataWinFormApp
+﻿using Microsoft.Web.WebView2.WinForms;
+
+namespace DataWinFormApp
 {
     partial class Form1
     {
@@ -28,48 +30,86 @@
         /// </summary>
         private void InitializeComponent()
         {
+            menuStrip = new MenuStrip();
+            fileMenu = new ToolStripMenuItem();
+            fileToolStripMenuItem = new ToolStripMenuItem();
+            exitToolStripMenuItem = new ToolStripMenuItem();
+            editMenu = new ToolStripMenuItem();
+            viewMenu = new ToolStripMenuItem();
+            openFileDialog1 = new OpenFileDialog();
+            menuStrip.SuspendLayout();
             SuspendLayout();
+            // 
+            // menuStrip
+            // 
+            menuStrip.ImageScalingSize = new Size(24, 24);
+            menuStrip.Items.AddRange(new ToolStripItem[] { fileMenu, editMenu, viewMenu });
+            menuStrip.Location = new Point(0, 0);
+            menuStrip.Name = "menuStrip";
+            menuStrip.Size = new Size(2472, 33);
+            menuStrip.TabIndex = 0;
+            // 
+            // fileMenu
+            // 
+            fileMenu.DropDownItems.AddRange(new ToolStripItem[] { fileToolStripMenuItem, exitToolStripMenuItem });
+            fileMenu.Name = "fileMenu";
+            fileMenu.Size = new Size(54, 29);
+            fileMenu.Text = "File";
+            // 
+            // fileToolStripMenuItem
+            // 
+            fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            fileToolStripMenuItem.Size = new Size(141, 34);
+            fileToolStripMenuItem.Text = "File";
+            fileToolStripMenuItem.Click += fileToolStripMenuItem_Click;
+            // 
+            // exitToolStripMenuItem
+            // 
+            exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            exitToolStripMenuItem.Size = new Size(141, 34);
+            exitToolStripMenuItem.Text = "Exit";
+            exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
+            // 
+            // editMenu
+            // 
+            editMenu.Name = "editMenu";
+            editMenu.Size = new Size(58, 29);
+            editMenu.Text = "Edit";
+            // 
+            // viewMenu
+            // 
+            viewMenu.Name = "viewMenu";
+            viewMenu.Size = new Size(65, 29);
+            viewMenu.Text = "View";
+            // 
+            // openFileDialog1
+            // 
+            openFileDialog1.FileName = "openFileDialog1";
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(2472, 1313);
+            Controls.Add(menuStrip);
             Name = "Form1";
-            Text = "Form1";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "WinForms with Top-Level Bar";
+            WindowState = FormWindowState.Maximized;
+            menuStrip.ResumeLayout(false);
+            menuStrip.PerformLayout();
             ResumeLayout(false);
-
-            MenuStrip menuStrip = new MenuStrip();
-            ToolStripMenuItem fileMenu = new ToolStripMenuItem("File");
-            ToolStripMenuItem editMenu = new ToolStripMenuItem("Edit");
-            ToolStripMenuItem viewMenu = new ToolStripMenuItem("View");
-
-            // Add items to the file menu
-            fileMenu.DropDownItems.Add("New");
-            fileMenu.DropDownItems.Add("Open");
-            fileMenu.DropDownItems.Add("Save");
-
-            ToolStripItem Exit = fileMenu.DropDownItems.Add("Exit");
-            Exit.Click += (sender, e) => { Application.Exit(); };
-
-            // Add the menus to the MenuStrip
-            menuStrip.Items.Add(fileMenu);
-            menuStrip.Items.Add(editMenu);
-            menuStrip.Items.Add(viewMenu);
-
-
-            // Set Dock properties
-            menuStrip.Dock = DockStyle.Top;
-
-            // Add the MenuStrip and ToolStrip to the form's Controls
-            this.Controls.Add(menuStrip);
-
-            // Set form properties
-            this.Text = "WinForms with Top-Level Bar";
-            this.StartPosition = FormStartPosition.CenterScreen;
-            this.WindowState = FormWindowState.Maximized;
+            PerformLayout();
         }
 
         #endregion
+
+        private MenuStrip menuStrip;
+        private ToolStripMenuItem fileMenu;
+        private ToolStripMenuItem editMenu;
+        private ToolStripMenuItem viewMenu;
+        private ToolStripMenuItem fileToolStripMenuItem;
+        private ToolStripMenuItem exitToolStripMenuItem;
+        private OpenFileDialog openFileDialog1;
     }
 }
