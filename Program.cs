@@ -1,3 +1,7 @@
+using DataWinFormApp;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System;
 using System.Runtime.InteropServices;
 
 namespace DataWinFormApp
@@ -26,7 +30,16 @@ namespace DataWinFormApp
             ApplicationConfiguration.Initialize();
             AttachConsole();
             Task.Run(() => Application.Run(new Form2()));
-            Application.Run(new Form1());
+            IHostBuilder host = Host.CreateDefaultBuilder()
+            .ConfigureServices((context, services) =>
+            {
+                //services.AddScoped<IHelloService, HelloService>();
+                services.AddScoped<Form1>();
+            });
+            using (IServiceScope scope = host.Build().Services.CreateScope())
+            {
+                Application.Run(scope.ServiceProvider.GetRequiredService<Form1>());
+            }
         }
 
         static void AttachConsole()
