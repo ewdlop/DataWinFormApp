@@ -10,6 +10,7 @@ using Polly;
 using System;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
+using Azure.Identity;
 
 namespace DataWinFormApp
 {
@@ -26,6 +27,7 @@ namespace DataWinFormApp
         private static partial bool FreeConsole();
 
 
+        //TODO: research further and test this code
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
@@ -36,14 +38,31 @@ namespace DataWinFormApp
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             AttachConsole();
-            Task.Run(() => Application.Run(new Form2()));
+            //Task.Run(() => Application.Run(new Form2()));
 
-            IHostBuilder host = Host.CreateDefaultBuilder()
+            IHostBuilder host = Host.CreateDefaultBuilder().ConfigureAppConfiguration((context, config) =>
+            {
+                config.AddAzureKeyVault(
+                    new Uri($"https://{context.Configuration["KeyVaultName"]}.vault.azure.net/"),
+                    new DefaultAzureCredential(includeInteractiveCredentials: true)
+                );
+            })
             .ConfigureServices((context, services) =>
             {
-                services.AddHttpClient<IAPIService, APIService>()
-                        .SetHandlerLifetime(TimeSpan.FromMinutes(5))
-                        .AddPolicyHandler(GetRetryPolicy());  //Set lifetime to five minutes
+                //this is for typed clients
+                //https://learn.microsoft.com/en-us/dotnet/core/extensions/httpclient-factory#typed-clients
+                //services.AddHttpClient<IAPIService, APIService>()
+                //        .SetHandlerLifetime(TimeSpan.FromMinutes(5))
+                //
+                //
+
+                //https://learn.microsoft.com/en-us/dotnet/core/extensions/httpclient-factory#named-clients
+                services.AddHttpClient("named")
+                      .SetHandlerLifetime(TimeSpan.FromMinutes(5))
+                      .AddPolicyHandler(GetRetryPolicy());
+                services.AddHttpClient("cosmos")
+                  .SetHandlerLifetime(TimeSpan.FromMinutes(5))
+                  .AddPolicyHandler(GetRetryPolicy());
 
                 //services.AddScoped<IHelloService, HelloService>();
                 services.AddScoped(services =>
@@ -107,6 +126,7 @@ namespace DataWinFormApp
 
                     return b2cTenantConfidentialClientApplication;
                 });
+                services.AddScoped<IAPIService, APIService>();
                 services.AddScoped<Form1>();
 
                 //https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/best-practice-dotnet
@@ -126,15 +146,13 @@ namespace DataWinFormApp
                     Guard.IsNotNullOrWhiteSpace(connectionString);
                     CosmosClientOptions cosmosClientOptions = new CosmosClientOptions()
                     {
-                        HttpClientFactory = () => httpClientFactory.CreateClient()
+                        HttpClientFactory = () => httpClientFactory.CreateClient("cosmos")
                     };
                     return new CosmosClient(connectionString, cosmosClientOptions);
                 });
 
             });
 
-
-            //TODO: research further and test this code
             using (IServiceScope scope = host.Build().Services.CreateScope())
             {
                 Form1 form = scope.ServiceProvider.GetRequiredService<Form1>();
@@ -162,20 +180,5 @@ namespace DataWinFormApp
                 .WaitAndRetryAsync(6, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
         }
 
-    }
-
-    public interface IAPIService
-    {
-
-    }
-
-    public class APIService : IAPIService
-    {
-        private readonly HttpClient _httpClient;
-
-        public APIService(HttpClient httpClient)
-        {
-            _httpClient = httpClient;
-        }
     }
 }

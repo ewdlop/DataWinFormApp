@@ -40,16 +40,21 @@ namespace DataWinFormApp
             openFileDialog1 = new OpenFileDialog();
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
-            tabPage2 = new TabPage();
-            label1 = new Label();
+            providerlabel1 = new Label();
+            textBox2 = new TextBox();
+            querybutton1 = new Button();
+            tenantlabel1 = new Label();
             textBox1 = new TextBox();
             dataGridView1 = new DataGridView();
             Column1 = new DataGridViewTextBoxColumn();
             Column2 = new DataGridViewTextBoxColumn();
+            tabPage2 = new TabPage();
+            treeView1 = new TreeView();
             menuStrip.SuspendLayout();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            tabPage2.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip
@@ -72,21 +77,21 @@ namespace DataWinFormApp
             // fileToolStripMenuItem
             // 
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            fileToolStripMenuItem.Size = new Size(180, 22);
+            fileToolStripMenuItem.Size = new Size(106, 22);
             fileToolStripMenuItem.Text = "File";
             fileToolStripMenuItem.Click += fileToolStripMenuItem_Click;
             // 
             // loginStripMenuItem1
             // 
             loginStripMenuItem1.Name = "loginStripMenuItem1";
-            loginStripMenuItem1.Size = new Size(180, 22);
+            loginStripMenuItem1.Size = new Size(106, 22);
             loginStripMenuItem1.Text = "Login";
             loginStripMenuItem1.Click += loginMenuItem1_Click;
             // 
             // exitToolStripMenuItem
             // 
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new Size(180, 22);
+            exitToolStripMenuItem.Size = new Size(106, 22);
             exitToolStripMenuItem.Text = "Exit";
             exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
             // 
@@ -119,7 +124,10 @@ namespace DataWinFormApp
             // 
             // tabPage1
             // 
-            tabPage1.Controls.Add(label1);
+            tabPage1.Controls.Add(providerlabel1);
+            tabPage1.Controls.Add(textBox2);
+            tabPage1.Controls.Add(querybutton1);
+            tabPage1.Controls.Add(tenantlabel1);
             tabPage1.Controls.Add(textBox1);
             tabPage1.Controls.Add(dataGridView1);
             tabPage1.Location = new Point(4, 24);
@@ -130,24 +138,43 @@ namespace DataWinFormApp
             tabPage1.Text = "tabPage1";
             tabPage1.UseVisualStyleBackColor = true;
             // 
-            // tabPage2
+            // providerlabel1
             // 
-            tabPage2.Location = new Point(4, 24);
-            tabPage2.Name = "tabPage2";
-            tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(192, 72);
-            tabPage2.TabIndex = 1;
-            tabPage2.Text = "tabPage2";
-            tabPage2.UseVisualStyleBackColor = true;
+            providerlabel1.AutoSize = true;
+            providerlabel1.Location = new Point(158, 10);
+            providerlabel1.Name = "providerlabel1";
+            providerlabel1.Size = new Size(54, 15);
+            providerlabel1.TabIndex = 4;
+            providerlabel1.Text = "Provider";
             // 
-            // label1
+            // textBox2
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(8, 10);
-            label1.Name = "label1";
-            label1.Size = new Size(42, 15);
-            label1.TabIndex = 0;
-            label1.Text = "label1";
+            textBox2.BorderStyle = BorderStyle.FixedSingle;
+            textBox2.Location = new Point(217, 6);
+            textBox2.Name = "textBox2";
+            textBox2.Size = new Size(100, 23);
+            textBox2.TabIndex = 5;
+            textBox2.TextChanged += TextBoxes_TextChanged;
+            // 
+            // querybutton1
+            // 
+            querybutton1.Enabled = false;
+            querybutton1.Location = new Point(323, 6);
+            querybutton1.Name = "querybutton1";
+            querybutton1.Size = new Size(75, 23);
+            querybutton1.TabIndex = 3;
+            querybutton1.Text = "Query";
+            querybutton1.UseVisualStyleBackColor = true;
+            querybutton1.Click += querybutton1_Click;
+            // 
+            // tenantlabel1
+            // 
+            tenantlabel1.AutoSize = true;
+            tenantlabel1.Location = new Point(8, 10);
+            tenantlabel1.Name = "tenantlabel1";
+            tenantlabel1.Size = new Size(46, 15);
+            tenantlabel1.TabIndex = 0;
+            tenantlabel1.Text = "Tenant";
             // 
             // textBox1
             // 
@@ -156,6 +183,7 @@ namespace DataWinFormApp
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(100, 23);
             textBox1.TabIndex = 1;
+            textBox1.TextChanged += TextBoxes_TextChanged;
             // 
             // dataGridView1
             // 
@@ -178,6 +206,26 @@ namespace DataWinFormApp
             Column2.HeaderText = "Column2";
             Column2.Name = "Column2";
             // 
+            // tabPage2
+            // 
+            tabPage2.Controls.Add(treeView1);
+            tabPage2.Location = new Point(4, 24);
+            tabPage2.Name = "tabPage2";
+            tabPage2.Padding = new Padding(3);
+            tabPage2.Size = new Size(1339, 585);
+            tabPage2.TabIndex = 1;
+            tabPage2.Text = "tabPage2";
+            tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // treeView1
+            // 
+            treeView1.Dock = DockStyle.Left;
+            treeView1.Location = new Point(3, 3);
+            treeView1.Name = "treeView1";
+            treeView1.Size = new Size(121, 579);
+            treeView1.TabIndex = 0;
+            treeView1.AfterSelect += treeView1_AfterSelect;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -197,6 +245,7 @@ namespace DataWinFormApp
             tabPage1.ResumeLayout(false);
             tabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            tabPage2.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -215,9 +264,13 @@ namespace DataWinFormApp
         private TabPage tabPage1;
         private TabPage tabPage2;
         private TextBox textBox1;
-        private Label label1;
+        private Label tenantlabel1;
         private DataGridView dataGridView1;
         private DataGridViewTextBoxColumn Column1;
         private DataGridViewTextBoxColumn Column2;
+        private Button querybutton1;
+        private Label providerlabel1;
+        private TextBox textBox2;
+        private TreeView treeView1;
     }
 }
